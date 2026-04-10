@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Futurize — Career Quiz</title>
+  <style>
+    /* ---------- FUTURIZE THEME (integrated & working) ---------- */
+    :root{
+      --bg: #0F0F1D;
+      --text: #E0E0E0;
+      --neon: #00FFE0;
+      --pink: #FF6EC7;
+      --card-bg: #ffffff;
+      --card-text: #000;
+      --glass-shadow: rgba(0,255,224,0.18);
+      --radius: 12px;
+      --maxw: 920px;
+    }
+
+    /* page */
+    html,body{
+      height:100%;
+      margin:0;
+      padding:0;
+      font-family: 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      overflow:auto; /* allow scrolling if needed */
+    }
+
+    /* optional background blur iframe - uncomment in body if using */
+    .bg-iframe{
+      position:fixed;
+      inset:0;
+      width:100%;
+      height:100%;
+      z-index:-1;
+      border:0;
+      filter: blur(6px) brightness(0.7);
+    }
+
+    /* navbar */
+    .navbar {
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:16px;
+      padding:1rem 2rem;
+      background: rgba(255,255,255,0.03);
+      backdrop-filter: blur(6px);
+      border-bottom: 1px solid rgba(255,255,255,0.02);
+    }
+
+    .logo {font-size: 1.9rem;color: #00FFE0;}
+    .nav-links { list-style:none; display:flex; gap:12px; margin:0; padding:0; }
+    .nav-links a {
+      text-decoration:none;
+      color:#0F0F1D;
+      background-color: var(--neon);
+      padding:0.36rem 0.9rem;
+      border-radius:8px;
+      font-weight:700;
+      box-shadow: 0 0 10px var(--neon);
+    }
+    .nav-links a:hover { background: var(--pink); color:#000; box-shadow:0 0 22px var(--pink); }
+
+    /* main container */
+    .page {
+      display:flex;
+      justify-content:center;
+      padding:28px;
+    }
+
+    .quiz-wrapper {
+      width: min(95%, var(--maxw));
+      display:grid;
+      grid-template-columns: 1fr 340px;
+      gap:20px;
+      align-items:start;
+    }
+
+    /* quiz card (left) */
+    .quiz-card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border-radius: 14px;
+      padding:22px;
+      box-shadow: 0 12px 40px rgba(2,6,23,0.6);
+      border: 1px solid rgba(255,255,255,0.03);
+      min-height:420px;
+    }
+
+    .quiz-header {
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      margin-bottom:12px;
+    }
+
+    .title {
+      font-size:18px;
+      color: #eaf4ff;
+      margin:0;
+    }
+
+    .q-count { color: rgba(255,255,255,0.6); font-size:13px; }
+
+    .progress {
+      height:10px;
+      background: rgba(255,255,255,0.03);
+      border-radius:999px;
+      overflow:hidden;
+      flex:1;
+      margin-left:12px;
+    }
+    .progress > span { display:block; height:100%; width:0%; background: linear-gradient(90deg,var(--neon),#66a6ff); transition:width .35s ease; }
+
+    .question-title {
+      color:#f3f7ff;
+      font-size:18px;
+      margin:18px 0 12px 0;
+    }
+
+    .options { display:flex; flex-direction:column; gap:10px; }
+
+    /* option style adapted to Futurize theme */
+    .option {
+      display:flex;
+      gap:12px;
+      align-items:center;
+      padding:12px 14px;
+      border-radius:10px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.012), rgba(255,255,255,0.008));
+      border:1px solid rgba(255,255,255,0.03);
+      cursor:pointer;
+      transition: transform .12s ease, box-shadow .12s ease, background .12s ease;
+      user-select:none;
+    }
+
+    .option:hover { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(2,6,23,0.45); }
+    .option input { accent-color: var(--neon); width:18px; height:18px; }
+
+    .option.selected {
+      background: linear-gradient(90deg, rgba(0,255,224,0.06), rgba(255,255,255,0.01));
+      border: 1px solid rgba(0,255,224,0.18);
+      box-shadow: 0 10px 30px rgba(0,255,224,0.04);
+    }
+
+    .controls {
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      margin-top:18px;
+    }
+
+    .btn {
+      padding:10px 14px;
+      border-radius:10px;
+      border: none;
+      cursor:pointer;
+      background: rgba(255,255,255,0.02);
+      color: var(--text);
+      font-weight:700;
+    }
+
+    .btn.ghost { border:1px solid rgba(255,255,255,0.03); color: rgba(255,255,255,0.8); }
+    .btn.primary {
+      background: linear-gradient(90deg,var(--pink),var(--neon));
+      color:#000;
+      box-shadow: 0 8px 22px rgba(255,110,199,0.12);
+    }
+
+    .btn.primary:hover { box-shadow: 0 12px 30px rgba(0,255,224,0.14); }
+
+    /* sidebar (right) */
+    .sidebar {
+      background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));
+      border-radius:12px;
+      padding:18px;
+      border:1px solid rgba(255,255,255,0.03);
+      color: rgba(255,255,255,0.9);
+      min-height:420px;
+    }
+
+    .sidebar h3 { margin-top:0; color:var(--neon); }
+    .sidebar p { color: rgba(255,255,255,0.7); font-size:14px; line-height:1.5; }
+
+    .result-card {
+      margin-top:14px;
+      padding:12px;
+      border-radius:10px;
+      background: linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      color: #eaf4ff;
+    }
+
+    /* result screen style (white card to stand out) */
+    .final-result {
+      background: var(--card-bg);
+      color: var(--card-text);
+      border-radius: 12px;
+      padding:18px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+      border: 1px solid rgba(0,0,0,0.06);
+    }
+
+    .final-result h2 { margin:0 0 8px 0; }
+    .final-result h3 { color: var(--neon); margin:8px 0; }
+
+    @media (max-width:980px){
+      .quiz-wrapper { grid-template-columns: 1fr; }
+      .sidebar { order: 2; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Optional background iframe (commented out). If you use, uncomment it.
+  <iframe class="bg-iframe" src="your-bg-video-or-image.html" aria-hidden="true"></iframe>
+  -->
+
+  <nav class="navbar" role="navigation">
+    <div class="logo">Futurize</div>
+    <ul class="nav-links" aria-hidden="true">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="dashboard.php">Dashboard</a></li>
+      <li><a href="logout.php" class="logout-btn">Logout</a></li>
+    </ul>
+  </nav>
+
+  <div class="page">
+    <div class="quiz-wrapper">
+
+      <!-- LEFT: quiz card -->
+      <section class="quiz-card" id="quizCard" aria-live="polite">
+        <div class="quiz-header">
+          <div>
+            <div class="title">Futurize — Career Quiz</div>
+            <div class="q-count" id="qCount">Question 1 / 14</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px;width:45%;">
+            <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
+          </div>
+        </div>
+
+        <div id="questionArea" aria-describedby="qCount">
+          <!-- question will render here by JS -->
+        </div>
+
+        <div class="controls" style="margin-top:14px;">
+          <button class="btn ghost" id="backBtn" onclick="prevQuestion()" disabled>← Back</button>
+          <div style="display:flex;gap:10px;">
+            <button class="btn ghost" id="skipBtn" onclick="skipQuestion()">Skip</button>
+            <button class="btn primary" id="nextBtn" onclick="nextQuestion()">Next →</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- RIGHT: sidebar -->
+      <aside class="sidebar" id="sidebar">
+        <h3>How it works</h3>
+        <p>Answer 14 quick questions. Each answer gives points to a career group. When you finish, you'll see your top-fit field and suggestions.</p>
+
+        <h3 style="margin-top:16px">Progress</h3>
+        <p id="sidebarProgress">0 of 14 answered</p>
+
+        <div id="resultPreview"></div>
+      </aside>
+
+    </div>
+  </div>
+
+  <script>
+    /* Questions & logic (same as earlier, kept intact) */
+    const questions = [
+      { q: "1. Do you enjoy solving complex problems, coding, or working with machines?",
+        opts: [{t:"A. Yes, always!", group:"tech", w:3},
+        {t:"B. Sometimes",group:"tech",w:2},
+        {t:"C. Not sure",group:"none",w:1},
+        {t:"D. Not really",group:"none",w:0}] },
+
+      { q: "2. Would you like a career that involves innovation, programming, or building systems?",
+        opts: [{t:"A. Definitely",group:"tech",w:3},
+        {t:"B. Maybe",group:"tech",w:2},
+        {t:"C. Not really",group:"none",w:1},
+        {t:"D. No",group:"none",w:0}] },
+
+      { q: "3. Do you enjoy leading teams, planning events, or making strategies?",
+        opts: [{t:"A. Yes, that’s me",group:"business",w:3},
+        {t:"B. Sometimes",group:"business",w:2},
+        {t:"C. Rarely",group:"none",w:1},
+        {t:"D. Never",group:"none",w:0}] },
+
+      { q: "4. Would you like to run your own business or manage projects?",
+        opts: [{t:"A. Absolutely",group:"business",w:3},
+        {t:"B. Maybe in the future",group:"business",w:2},
+        {t:"C. Not much",group:"none",w:1},
+        {t:"D. No",group:"none",w:0}] },
+
+      { q: "5. Do you enjoy designing, drawing, writing, or creating digital content?",
+        opts: [{t:"A. Yes, I love it",group:"creative",w:3},
+        {t:"B. A little",group:"creative",w:2},
+        {t:"C. Not much",group:"none",w:1},
+        {t:"D. No",group:"none",w:0}] },
+      { q: "6. Do you often come up with new and imaginative ideas?",
+        opts: [{t:"A. All the time",group:"creative",w:3},
+        {t:"B. Sometimes",group:"creative",w:2},
+        {t:"C. Rarely",group:"none",w:1},
+        {t:"D. Never",group:"none",w:0}] },
+
+      { q: "7. Are you curious about how the body, medicine, or scientific discoveries work?",
+        opts: [{t:"A. Very curious",group:"science",w:3},
+        {t:"B. Somewhat",group:"science",w:2},
+        {t:"C. Not really",group:"none",w:1},
+        {t:"D. No",group:"none",w:0}] },
+
+      { q: "8. Would you like a career where you help people stay healthy or solve medical problems?",
+        opts: [{t:"A. Definitely",group:"science",w:3},
+        {t:"B. Maybe",group:"science",w:2},
+        {t:"C. Not sure",group:"none",w:1},
+        {t:"D. Not really",group:"none",w:0}] },
+
+      { q: "9. Do you enjoy explaining topics or helping others learn?",
+        opts: [{t:"A. Yes, a lot",group:"education",w:3},
+        {t:"B. Sometimes",group:"education",w:2},
+        {t:"C. Not much",group:"none",w:1},
+        {t:"D. No",group:"none",w:0}] },
+
+      { q: "10. Do you like supporting or motivating people who are struggling?",
+        opts: [{t:"A. Always",group:"education",w:3},
+        {t:"B. Often",group:"education",w:2},
+        {t:"C. Rarely",group:"none",w:1},
+        {t:"D. Never",group:"none",w:0}] },
+
+      { q: "11. Do you like topics related to justice, rules, or protecting others’ rights?",
+        opts: [{t:"A. Yes, very much",group:"law",w:3},
+        {t:"B. A bit",group:"law",w:2},
+        {t:"C. Not really",group:"none",w:1},
+        {t:"D. No",group:"none",w:0}] },
+
+      { q: "12. Would you like to work in law, police, or public service?",
+        opts: [{t:"A. Yes, I’d love to",group:"law",w:3},
+        {t:"B. Maybe",group:"law",w:2},
+        {t:"C. Not sure",group:"none",w:1},
+        {t:"D. No",group:"none",w:0}] },
+
+      { q: "13. Do you enjoy working with tools, fixing things, or doing hands-on jobs?",
+        opts: [{t:"A. Yes, absolutely",group:"trades",w:3},
+        {t:"B. Sometimes",group:"trades",w:2},
+        {t:"C. Not really",group:"none",w:1},
+        {t:"D. No",group:"none",w:0}] },
+
+      { q: "14. Would you rather work practically than sit at a computer all day?",
+        opts: [{t:"A. Yes",group:"trades",w:3},
+        {t:"B. Maybe",group:"trades",w:2},
+        {t:"C. Not sure",group:"none",w:1},
+        {t:"D. No",group:"none",w:0}] }
+    ];
+
+    const careerNames = {
+      tech: "Technology & Engineering 💻",
+      business: "Business & Management 💼",
+      creative: "Creative & Media 🎨",
+      science: "Healthcare & Science 🧬",
+      education: "Education & Social Work 📚",
+      law: "Law & Government ⚖️",
+      trades: "Trades & Practical Careers 🔧"
+    };
+    const suggestions = {
+      tech: "Try roles like Software Developer, Web Designer, or Data Analyst.",
+      business: "You might fit Management, Marketing, or Entrepreneurship.",
+      creative: "You could shine as a Graphic Designer, Writer, or Video Editor.",
+      science: "Careers like Doctor, Lab Technician, or Pharmacist may suit you.",
+      education: "Consider becoming a Teacher, Counselor, or Social Worker.",
+      law: "You might do well as a Lawyer, PSI, or Civil Service Officer.",
+      trades: "Explore fields like Mechanic, Chef, or Electrician."
+    };
+
+    // state
+    let current = 0;
+    let answers = new Array(questions.length).fill(null);
+    let scores = { tech:0, business:0, creative:0, science:0, education:0, law:0, trades:0 };
+
+    // dom refs
+    const questionArea = document.getElementById('questionArea');
+    const qCount = document.getElementById('qCount');
+    const progressBar = document.getElementById('progressBar');
+    const sidebarProgress = document.getElementById('sidebarProgress');
+    const resultPreview = document.getElementById('resultPreview');
+    const backBtn = document.getElementById('backBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const skipBtn = document.getElementById('skipBtn');
+
+    // initial render
+    renderQuestion();
+
+    function renderQuestion(){
+      const item = questions[current];
+      const answered = answers[current] !== null;
+      qCount.textContent = `Question ${current+1} / ${questions.length}`;
+      progressBar.style.width = `${Math.round((current)/questions.length * 100)}%`;
+
+      let html = `<div>
+                    <div class="question-title">${item.q}</div>
+                    <div class="options" role="radiogroup">`;
+      item.opts.forEach((opt, i) => {
+        const id = `q${current}_o${i}`;
+        const isSelected = answered && answers[current].index === i;
+        html += `
+          <label class="option ${isSelected? 'selected':''}" for="${id}" data-index="${i}">
+            <input type="radio" id="${id}" name="opt_${current}" ${isSelected? 'checked':''} />
+            <div style="flex:1">
+              <div style="font-weight:700;color:#eaf4ff">${opt.t}</div>
+            </div>
+          </label>
+        `;
+      });
+      html += `</div></div>`;
+      questionArea.innerHTML = html;
+
+      // attach handlers to labels
+      document.querySelectorAll('.option').forEach(lbl => {
+        lbl.addEventListener('click', () => {
+          const idx = parseInt(lbl.getAttribute('data-index'), 10);
+          selectOption(idx);
+        });
+      });
+
+      backBtn.disabled = current === 0;
+      nextBtn.textContent = current === questions.length -1 ? "Submit" : "Next →";
+      updateSidebar();
+    }
+
+    function selectOption(index){
+      const optData = questions[current].opts[index];
+      answers[current] = { group: optData.group, w: optData.w, index };
+      // visually mark
+      document.querySelectorAll('.option').forEach((el, i) => {
+        el.classList.toggle('selected', i === index);
+        const input = el.querySelector('input');
+        input.checked = i === index;
+      });
+      updateSidebar();
+    }
+
+    function nextQuestion(){
+      if(current === questions.length - 1){
+        const answeredCount = answers.filter(a => a!==null).length;
+        if(answeredCount < questions.length){
+          if(!confirm(`You answered ${answeredCount}/${questions.length}. Submit anyway?`)) return;
+        }
+        calculateResult();
+        return;
+      }
+      current++;
+      renderQuestion();
+    }
+
+    function prevQuestion(){
+      if(current === 0) return;
+      current--;
+      renderQuestion();
+    }
+
+    function skipQuestion(){
+      if(current < questions.length -1){
+        current++;
+        renderQuestion();
+      }
+    }
+
+    function updateSidebar(){
+      const answeredCount = answers.filter(a => a!==null).length;
+      sidebarProgress.textContent = `${answeredCount} of ${questions.length} answered`;
+
+      // preview top if enough answered
+      const temp = { tech:0, business:0, creative:0, science:0, education:0, law:0, trades:0 };
+      answers.forEach(a=>{
+        if(a && a.group && a.group!=='none' && temp.hasOwnProperty(a.group)) temp[a.group]+=a.w;
+      });
+      if(answers.filter(a=>a!==null).length >= 3){
+        let top = Object.keys(temp).reduce((x,y)=> temp[x]>=temp[y]?x:y);
+        if(temp[top] === 0) resultPreview.innerHTML = '';
+        else resultPreview.innerHTML = `<div class="result-card"><strong>${careerNames[top]}</strong><div style="margin-top:8px;color:rgba(255,255,255,0.8)">${suggestions[top]}</div></div>`;
+      } else resultPreview.innerHTML = '';
+    }
+
+    function calculateResult(){
+      // compute final scores
+      scores = { tech:0, business:0, creative:0, science:0, education:0, law:0, trades:0 };
+      answers.forEach(a=>{
+        if(!a || !a.group) return;
+        if(a.group === 'none') return;
+        if(scores.hasOwnProperty(a.group)) scores[a.group]+=a.w;
+      });
+
+      const any = Object.values(scores).some(v=>v>0);
+      if(!any){
+        alert("No scored answers found. Please answer some questions to get a result.");
+        return;
+      }
+
+      let max = Math.max(...Object.values(scores));
+      let topGroups = Object.keys(scores).filter(g=>scores[g]===max);
+
+      // build result html
+      let resultHtml = `<div class="final-result"><h2>Your Best Fit Field${topGroups.length>1?'s':''}:</h2>`;
+      topGroups.forEach(g=>{
+        resultHtml += `<div style="margin-top:12px;padding:12px;border-radius:8px;background:#fff;color:#000">
+          <div style="font-weight:800">${careerNames[g]}</div>
+          <div style="margin-top:8px">${suggestions[g]}</div>
+        </div>`;
+      });
+      resultHtml += `<div style="margin-top:14px;text-align:center;"><button class="btn primary" onclick="retakeQuiz()">Retake Quiz</button></div></div>`;
+
+      questionArea.innerHTML = resultHtml;
+      progressBar.style.width = "100%";
+      qCount.textContent = `Completed — ${questions.length} / ${questions.length}`;
+      backBtn.disabled = true; nextBtn.disabled = true; skipBtn.disabled = true;
+      sidebarProgress.textContent = `${answers.filter(a=>a!==null).length} of ${questions.length} answered`;
+      resultPreview.innerHTML = '';
+    }
+
+    function retakeQuiz(){
+      current = 0;
+      answers = new Array(questions.length).fill(null);
+      scores = { tech:0, business:0, creative:0, science:0, education:0, law:0, trades:0 };
+      backBtn.disabled = true; nextBtn.disabled = false; skipBtn.disabled = false;
+      renderQuestion();
+      progressBar.style.width = "0%";
+      resultPreview.innerHTML = '';
+    }
+
+    // keyboard nav
+    document.addEventListener('keydown', (e)=>{
+      if(e.key === 'ArrowRight') nextQuestion();
+      if(e.key === 'ArrowLeft') prevQuestion();
+    });
+  </script>
+</body>
+</html>

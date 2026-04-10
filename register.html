@@ -1,0 +1,38 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Login - Futurize</title>
+    <link rel="stylesheet" href="css/registerstyles.css">
+    
+</head>
+<body>
+    <iframe src="index.html" class="bg-iframe"></iframe>
+     <nav class="navbar">
+            <div class="logo">Futurize</div>
+
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="quiz.html">Quiz</a></li>
+                <li><a href="dashboard.php">Career</a></li>
+                <li><a href="loginpage.html">Login</a></li>
+            </ul>
+
+        </nav>
+
+
+        <div class="register-container" >
+            <h2>Welcome to Futurize</h2>
+            <h3>Create an Account</h3>
+            <form action="register.php" method="POST">
+                <div class="names">  
+                    <input class="ul" type="text" name="fname" placeholder="First name" required>
+                    <input class="ul" type="text" name="lname" placeholder="Last name" required>
+                </div>
+                <input class="ul" type="email" name="email" placeholder="Email" required>
+                <input class="ul" type="password" name="pass" placeholder="Enter your password" required>
+                <button type="submit">Create Account</button>
+                <p class="login-link">Already have an account? <a href="loginpage.html">    Sign in</a></p>
+            </form>
+        </div>
+</body>
+</html>

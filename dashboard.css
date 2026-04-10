@@ -1,0 +1,106 @@
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: #0F0F1D;
+    color: #E0E0E0;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem 2rem;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(6px);
+}
+
+.logo {
+    font-size: 1.9rem;
+    color: #00FFE0;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 1rem;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #000;
+    background-color: #00FFE0;
+    padding: 0.4rem 1rem;
+    border-radius: 8px;
+    font-weight: bold;
+    transition: 0.3s ease;
+    box-shadow: 0 0 10px #00FFE0;
+}
+
+.nav-links a:hover {
+    color: #000;
+    background-color: #FF6EC7;
+    box-shadow: 0 0 15px #FF6EC7;
+}
+
+/* --- Dashboard Card --- */
+.dashboard-container {
+    background-color: rgba(255, 255, 255, 0.05);
+    width: 400px;
+    margin: 7rem auto;
+    padding: 2rem 2.5rem;
+    border-radius: 15px;
+    box-shadow: 0 0 20px #00FFE0;
+    text-align: center;
+    backdrop-filter: blur(8px);
+    animation: fadeIn 0.6s ease-in-out;
+}
+
+.dashboard-container h2 {
+    color: #00FFE0;
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+}
+
+.dashboard-container p {
+    color: #ccc;
+    font-size: 1.1rem;
+    margin-bottom: 25px;
+}
+
+/* --- Buttons --- */
+.start-btn {
+    background: #FF6EC7;
+    color: #000;
+    padding: 0.8rem 1.6rem;
+    border-radius: 8px;
+    font-weight: bold;
+    text-decoration: none;
+    transition: 0.3s ease;
+    box-shadow: 0 0 15px #FF6EC7;
+}
+
+.start-btn:hover {
+    background-color: #00FFE0;
+    box-shadow: 0 0 20px #00FFE0;
+}
+
+.logout-btn {
+    background-color: #00FFE0;
+    color: #000 !important;
+    padding: 0.4rem 1rem;
+    border-radius: 8px;
+    font-weight: bold;
+    text-decoration: none;
+    transition: 0.3s ease;
+    box-shadow: 0 0 10px #00FFE0;
+}
+
+.logout-btn:hover {
+    background-color: #FF6EC7;
+    box-shadow: 0 0 15px #FF6EC7;
+}
+
+/* --- Animation --- */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}

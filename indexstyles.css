@@ -1,0 +1,131 @@
+body{
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: #0F0F1D;
+    color: #E0E0E0;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem 2rem;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(6px);
+    
+
+}
+
+.logo {
+    font-size: 1.9rem;
+    color: #00FFE0;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 1rem;
+}
+
+.nav-links a{
+    text-decoration: none;
+    color: #000;
+    background-color: #00FFE0;
+    padding: 0.4rem 1rem;
+    border-radius: 8px;
+    font-weight: bold;
+    transition: 0.3s ease;
+    box-shadow: 0 0 10px #00FFE0;
+}
+
+.nav-links a:hover {
+    color: #000;
+    background-color:#FF6EC7 ;
+    box-shadow: 0 0 15px #FF6EC7;
+}
+
+.hero {
+    text-align: center;
+    padding: 5rem 2rem;
+}
+
+.hero h1{
+    font-size: 3rem;
+    color:#00FFE0;
+}
+
+.hero p {
+  margin-top: 1rem;
+  font-size: 1.2rem;
+  color: #ccc;
+}
+
+.info {
+    text-align: center;
+    padding: 3rem 2rem;
+    background-color: rgba(255, 255, 255, 0.03);
+    margin-top: 2rem;
+    border-top: 1px solid #222;
+    
+}
+
+.info h2 {
+    color: #FF6EC7;
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    
+}
+
+.info p {
+    max-width: 600px;
+    margin: 0 auto;
+    font-size: 1.1rem;
+    color: #ccc;
+}
+
+
+.cta {
+    display: inline-block;
+    margin-top: 2rem;
+    background: #FF6EC7;
+    padding: 0.8rem 1.5rem;
+    color: #000;
+    border-radius: 8px;
+    text-decoration: none;
+    box-shadow: 0 0 12px #FF6EC7;
+    font-weight: bolder;
+    transition: 0.3s ease;
+}
+
+.cta:hover {
+    background-color: #00FFE0;
+    color: #000;
+    box-shadow: 0 0 18px #00FFE0;    
+}
+.footer {
+    text-align: center;
+    padding: 1.5rem 2rem;
+    background: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(6px);
+    color: #FF6EC7; 
+    font-size: 0.9rem;
+    margin-top: 3rem;
+    box-shadow: 0 -3px 10px #FF6EC7;
+}
+
+.footer .socials {
+    margin-top: 0.5rem;
+}
+
+.footer .socials a {
+    text-decoration: none;
+    color: #00FFE0; 
+    font-weight: bold;
+    transition: 0.3s ease;
+}
+
+.footer .socials a:hover {
+    color: #FF6EC7; 
+    text-shadow: 0 0 8px #FF6EC7;
+}
+
+
