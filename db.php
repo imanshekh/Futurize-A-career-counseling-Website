@@ -2,7 +2,7 @@
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "futurize_db"; // your database name
+$dbname = "futurize_db"; 
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
