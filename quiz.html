@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Futurize — Career Quiz</title>
   <style>
-    /* ---------- FUTURIZE THEME (integrated & working) ---------- */
     :root{
       --bg: #0F0F1D;
       --text: #E0E0E0;
@@ -18,7 +17,7 @@
       --maxw: 920px;
     }
 
-    /* page */
+    
     html,body{
       height:100%;
       margin:0;
@@ -31,7 +30,7 @@
       overflow:auto; /* allow scrolling if needed */
     }
 
-    /* optional background blur iframe - uncomment in body if using */
+    
     .bg-iframe{
       position:fixed;
       inset:0;
@@ -42,7 +41,7 @@
       filter: blur(6px) brightness(0.7);
     }
 
-    /* navbar */
+    
     .navbar {
       display:flex;
       justify-content:space-between;
@@ -67,7 +66,7 @@
     }
     .nav-links a:hover { background: var(--pink); color:#000; box-shadow:0 0 22px var(--pink); }
 
-    /* main container */
+   
     .page {
       display:flex;
       justify-content:center;
@@ -82,7 +81,6 @@
       align-items:start;
     }
 
-    /* quiz card (left) */
     .quiz-card {
       background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
       border-radius: 14px;
@@ -126,7 +124,7 @@
 
     .options { display:flex; flex-direction:column; gap:10px; }
 
-    /* option style adapted to Futurize theme */
+   
     .option {
       display:flex;
       gap:12px;
@@ -175,7 +173,7 @@
 
     .btn.primary:hover { box-shadow: 0 12px 30px rgba(0,255,224,0.14); }
 
-    /* sidebar (right) */
+    
     .sidebar {
       background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));
       border-radius:12px;
@@ -196,7 +194,7 @@
       color: #eaf4ff;
     }
 
-    /* result screen style (white card to stand out) */
+    
     .final-result {
       background: var(--card-bg);
       color: var(--card-text);
@@ -216,9 +214,7 @@
   </style>
 </head>
 <body>
-  <!-- Optional background iframe (commented out). If you use, uncomment it.
-  <iframe class="bg-iframe" src="your-bg-video-or-image.html" aria-hidden="true"></iframe>
-  -->
+  
 
   <nav class="navbar" role="navigation">
     <div class="logo">Futurize</div>
@@ -232,7 +228,7 @@
   <div class="page">
     <div class="quiz-wrapper">
 
-      <!-- LEFT: quiz card -->
+     
       <section class="quiz-card" id="quizCard" aria-live="polite">
         <div class="quiz-header">
           <div>
@@ -245,7 +241,7 @@
         </div>
 
         <div id="questionArea" aria-describedby="qCount">
-          <!-- question will render here by JS -->
+         
         </div>
 
         <div class="controls" style="margin-top:14px;">
@@ -257,7 +253,7 @@
         </div>
       </section>
 
-      <!-- RIGHT: sidebar -->
+      
       <aside class="sidebar" id="sidebar">
         <h3>How it works</h3>
         <p>Answer 14 quick questions. Each answer gives points to a career group. When you finish, you'll see your top-fit field and suggestions.</p>
@@ -272,7 +268,7 @@
   </div>
 
   <script>
-    /* Questions & logic (same as earlier, kept intact) */
+    
     const questions = [
       { q: "1. Do you enjoy solving complex problems, coding, or working with machines?",
         opts: [{t:"A. Yes, always!", group:"tech", w:3},
@@ -377,12 +373,12 @@
       trades: "Explore fields like Mechanic, Chef, or Electrician."
     };
 
-    // state
+    
     let current = 0;
     let answers = new Array(questions.length).fill(null);
     let scores = { tech:0, business:0, creative:0, science:0, education:0, law:0, trades:0 };
 
-    // dom refs
+  
     const questionArea = document.getElementById('questionArea');
     const qCount = document.getElementById('qCount');
     const progressBar = document.getElementById('progressBar');
@@ -392,7 +388,7 @@
     const nextBtn = document.getElementById('nextBtn');
     const skipBtn = document.getElementById('skipBtn');
 
-    // initial render
+ 
     renderQuestion();
 
     function renderQuestion(){
@@ -419,7 +415,7 @@
       html += `</div></div>`;
       questionArea.innerHTML = html;
 
-      // attach handlers to labels
+      
       document.querySelectorAll('.option').forEach(lbl => {
         lbl.addEventListener('click', () => {
           const idx = parseInt(lbl.getAttribute('data-index'), 10);
@@ -435,7 +431,7 @@
     function selectOption(index){
       const optData = questions[current].opts[index];
       answers[current] = { group: optData.group, w: optData.w, index };
-      // visually mark
+    
       document.querySelectorAll('.option').forEach((el, i) => {
         el.classList.toggle('selected', i === index);
         const input = el.querySelector('input');
@@ -487,7 +483,7 @@
     }
 
     function calculateResult(){
-      // compute final scores
+    
       scores = { tech:0, business:0, creative:0, science:0, education:0, law:0, trades:0 };
       answers.forEach(a=>{
         if(!a || !a.group) return;
@@ -504,7 +500,7 @@
       let max = Math.max(...Object.values(scores));
       let topGroups = Object.keys(scores).filter(g=>scores[g]===max);
 
-      // build result html
+      
       let resultHtml = `<div class="final-result"><h2>Your Best Fit Field${topGroups.length>1?'s':''}:</h2>`;
       topGroups.forEach(g=>{
         resultHtml += `<div style="margin-top:12px;padding:12px;border-radius:8px;background:#fff;color:#000">
@@ -532,7 +528,7 @@
       resultPreview.innerHTML = '';
     }
 
-    // keyboard nav
+    
     document.addEventListener('keydown', (e)=>{
       if(e.key === 'ArrowRight') nextQuestion();
       if(e.key === 'ArrowLeft') prevQuestion();
